@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a98fc0c1-93ee-4a8d-8488-8c0277170978" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="ms-dev-3Flow" doc:id="4ea88ee3-c556-4574-a370-e6253adcf69d" >
+		<http:listener doc:name="Listener" doc:id="68cff31c-596f-402e-9f6f-26b8fabedfb9" config-ref="HTTP_Listener_config" path="/case" doc:description="Pass in string value through Posman as raw text type field to this endpoint: http://localhost:8081/case"/>
+		<ee:transform doc:name="xformCamalCase" doc:id="225288be-a5e4-45b1-9c83-5ecf439437f3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import java!com::utils::MyUtils
+output application/json
+---
+{
+	camelCaseValue: MyUtils::changeCase(payload)
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="logResult" doc:id="950a1ffe-ac1b-4984-86f7-b1c569b9b950" />
+	</flow>
+</mule>

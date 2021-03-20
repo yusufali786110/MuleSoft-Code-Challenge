@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="3702f63e-f266-4f1c-9ca7-1ae49c24ca47" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="ms-dev-4Flow" doc:id="d941ffe2-5911-4bf8-a131-6b74174dda1c" >
+		<http:listener doc:name="Listener" doc:id="e88c24aa-eb5c-40da-891e-ae950b63e005" config-ref="HTTP_Listener_config" path="/join"/>
+		<ee:transform doc:name="joinInputs" doc:id="99ca84b2-e9ae-431c-9b27-c429feb0644d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+var employees = 
+{
+   "employee":[
+      {
+         "id":"A007",
+         "first_name":"Jan",
+         "last_name":"Doe"
+      },
+      {
+         "id":"A008",
+         "first_name":"Ron",
+         "last_name":"David"
+      },
+      {
+         "id":"A009",
+         "first_name":"Jane",
+         "last_name":"Kane"
+      },
+      {
+         "id":"A010",
+         "first_name":"Marsh",
+         "last_name":"Megan"
+      },
+      {
+         "id":"A011",
+         "first_name":"Kelly",
+         "last_name":"Mitch"
+      },
+      {
+         "id":"A012",
+         "first_name":"Chris",
+         "last_name":"Vaste"
+      }
+   ]
+}
+
+var scores = 
+{
+   "scoreBoard":[
+      {
+         "id":"A007",
+         "subjects":[
+            "Maths",
+            "English",
+            "Arts",
+            "Drawimgs"
+         ],
+         "score":[
+            80,
+            75,
+            89,
+            100
+         ]
+      },
+      {
+         "id":"A008",
+         "subjects":[
+            "Maths",
+            "English",
+            "Arts",
+            "Drawimgs"
+         ],
+         "score":[
+            70,
+            85,
+            69,
+            90
+         ]
+      },
+      {
+         "id":"A021",
+         "subjects":[
+            "Maths",
+            "English",
+            "Arts",
+            "Drawimgs"
+         ],
+         "score":[
+            90,
+            87,
+            77,
+            95
+         ]
+      }
+   ]
+}
+output application/json
+---
+{
+	certificate:[ (employees.employee map (employeesValues) -> using (id = employeesValues.id)
+		{
+			id: id,
+			firstName:employeesValues.first_name,
+			lastName:employeesValues.last_name,
+			(scores.scoreBoard filter ($.*id contains id) map (scoresValues) -> MarksBySubjectWise:{
+			 
+			 	Maths:scoresValues.score[0],
+			 	English:scoresValues.score[1],
+			 	Arts:scoresValues.score[2],
+			 	Drawing: scoresValues.score[3]			 	
+			}
+			)
+			
+		}
+		
+		)
+	]
+}
+	
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="logJoinResult" doc:id="bcfaf130-8a9a-4ee1-b23b-6d4c68ae5439" message="#[payload]"/>
+	</flow>
+</mule>

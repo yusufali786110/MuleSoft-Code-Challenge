@@ -1,0 +1,33 @@
+#%RAML 1.0
+types:
+  NumberList:
+    items:
+      example: 1
+      type: number
+      format: int
+title: NaturalNumbers
+baseUri: http://xxx.xxx.com
+mediaType:
+  - application/json
+version: 1.0.0
+protocols:
+  - HTTP
+  - HTTPS
+/naturally:
+  get:
+    displayName: naturalNums
+    queryParameters:
+      number:
+        example: 1
+        type: number
+        format: int
+    body: {}
+    securedBy: []
+  options:
+    responses:
+      "200":
+        body:
+          type: NumberList
+          items:
+            type: number
+            format: int

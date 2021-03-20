@@ -1,0 +1,32 @@
+#%RAML 1.0
+types:
+  employee:
+    properties:
+      employee?:
+        type: employeeItem
+  employeeItem:
+    properties:
+      id:
+        example: Example
+        type: string
+      first_name:
+        example: Example
+        type: string
+      last_name:
+        example: Example
+        type: string
+title: Employee
+mediaType:
+  - application/json
+version: 1.0.0
+protocols:
+  - HTTP
+  - HTTPS
+/employee:
+  post:
+    displayName: CreateEmployee
+    body:
+      type: employee
+    responses:
+      "201": {}
+baseUri: http://xxx.xxx.com

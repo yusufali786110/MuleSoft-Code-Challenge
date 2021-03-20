@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="employee" format="json">
+      <types:shape format="weave" example="examples/employee.json"><![CDATA[%dw 2.0
+
+type employee = {|
+  employee: Array<{|    id: String,     first_name: String,     last_name: String  |}>
+|} {"example": "{\\\"employee\\\":[{\\\"id\\\":\\\"A007\\\",\\\"first_name\\\":\\\"Jan\\\",\\\"last_name\\\":\\\"Doe\\\"},{\\\"id\\\":\\\"A008\\\",\\\"first_name\\\":\\\"Ron\\\",\\\"last_name\\\":\\\"David\\\"},{\\\"id\\\":\\\"A009\\\",\\\"first_name\\\":\\\"Jane\\\",\\\"last_name\\\":\\\"Kane\\\"},{\\\"id\\\":\\\"A010\\\",\\\"first_name\\\":\\\"Marsh\\\",\\\"last_name\\\":\\\"Megan\\\"},{\\\"id\\\":\\\"A011\\\",\\\"first_name\\\":\\\"Kelly\\\",\\\"last_name\\\":\\\"Mitch\\\"},{\\\"id\\\":\\\"A012\\\",\\\"first_name\\\":\\\"Chris\\\",\\\"last_name\\\":\\\"Vaste\\\"}]}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="score" format="json">
+      <types:shape format="weave" example="examples/scoreBoard.json"><![CDATA[%dw 2.0
+
+type score = {|
+  scoreBoard: Array<{|    id: String,     subjects: Array<String>, 
+    score: Array<Number {"typeId": "int"}>
+  |}>
+|} {"example": "{\\\"scoreBoard\\\":[{\\\"id\\\":\\\"A007\\\",\\\"subjects\\\":[\\\"Maths\\\",\\\"English\\\",\\\"Arts\\\",\\\"Drawimgs\\\"],\\\"score\\\":[80,75,89,100]},{\\\"id\\\":\\\"A008\\\",\\\"subjects\\\":[\\\"Maths\\\",\\\"English\\\",\\\"Arts\\\",\\\"Drawimgs\\\"],\\\"score\\\":[70,85,69,90]},{\\\"id\\\":\\\"A021\\\",\\\"subjects\\\":[\\\"Maths\\\",\\\"English\\\",\\\"Arts\\\",\\\"Drawimgs\\\"],\\\"score\\\":[90,87,77,95]}]}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+</types:mule>
